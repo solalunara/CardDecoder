@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Card to Time Converter</title>
+    </head>
+
+    <body style="text-align:center; background-color:#826021;" onload="init()">
+        <h2>Enter your card result</h2>
+        <div style="margin-top: 30px;">
+            Branch classifications: mouse, bat, swan, fox, stag, rabbit, swallow
+        </div>
+        <div style="margin-top: 30px;">
+            Attribute classifications: sword, candle, pentagram, triplespiral, triplepoint
+        </div>
+        <div style="margin-top: 30px;">
+            Your answer should contain 3 space-delimited words: an attribute, your branch, and another attribute. Specifying whether or not there is blood is not neccesary.
+        </div>
+        <div style="margin-top: 30px;">
+            Please ensure that your attributes are entered left to right
+        </div>
+        <div style="margin-top: 30px;">
+            <textarea rows=1 cols=100 style="resize:none; text-align: center;" id="picture" r></textarea>
+        </div>
+        <div id="result" style="margin-top: 30px;" >
+
+        </div>
+        <button style="margin-top: 50px;" onclick="rojf()">r o j f</button>
+
+        <script>
+            let IndexTimeMap = {}
+            let TimeIndexMap = {}
+            
+            function init() {
+                for ( let i = 0; i < 60; ++i )
+                    IndexTimeMap[ i ] = Math.floor( i * 113 / 60 )
+                TimeIndexMap = Object.keys( IndexTimeMap ).reduce( (res,k) => Object.assign( res, {[IndexTimeMap[k]]: k}), {} )
+            }
+
+            function rojf() {
+                let text = document.getElementById( 'picture' ).value
+                let words = text.split( " " )
+                if ( words.length != 3 )
+                {
+                    alert( 'Your answer did not contain three words. Please make sure that your response has no trailing/leading spaces' )
+                    return
+                }
+                let att1 = words[ 0 ]
+                let att2 = words[ 2 ]
+                let branch = BranchMapper[ words[ 1 ] ]
+                let n = AttributeMapper( att1, att2, branch )
+                if ( n === -1 )
+                {
+                    alert( 'Your answer was not formatted properly. Please only type one of the possible attributes, then one of the possible branches, then one of the possible attributes' )
+                    return
+                }
+                if ( n === 0 )
+                {
+                    alert( 'Liar.' )
+                    return
+                }
+                let Name = branch + n.toString()
+                let Index = IndexMapper[ Name ]
+                let Time = TimeIndexMap[ Index ]
+                if ( Time === undefined )
+                {
+                    alert( 'Liar.' )
+                    return
+                }
+                document.getElementById( 'result' ).innerHTML = "Your time/location is " + Time.toString()
+            }
+
+            function AttributeMapper( att1, att2, branch )
+            {
+                switch ( att2 )
+                {
+                    case 'sword':
+                        switch ( att1 )
+                        {
+                            case 'pentagram':
+                                return 1
+                            case 'triplespiral':
+                                return 2
+                            case 'triplepoint':
+                                return 3
+                            case 'flower':
+                                return 4
+                            case 'candle':
+                                return 5
+                            case 'sword':
+                                return 0
+                            default:
+                                return -1
+                        }
+                    case 'candle':
+                        switch ( att1 )
+                        {
+                            case 'pentagram':
+                                return 6
+                            case 'triplespiral':
+                                return 7
+                            case 'triplepoint':
+                                return 8
+                            case 'flower':
+                                return 9
+                            case 'candle':
+                                return 0
+                            case 'sword':
+                                return 0
+                            default:
+                                return -1
+                        }
+                    case 'pentagram':
+                        switch ( att1 )
+                        {
+                            case 'pentagram':
+                                return 16
+                            case 'triplespiral':
+                                return 10
+                            case 'triplepoint':
+                                if ( branch === 'r' )
+                                    return 12
+                                else
+                                    return 11
+                            case 'flower':
+                                if ( branch === 'r' )
+                                    return 11
+                                else if ( branch === 'm' )
+                                    return 0
+                                else
+                                    return 12
+                            case 'candle':
+                                return 0
+                            case 'sword':
+                                return 0
+                            default:
+                                return -1
+                        }
+                    case 'triplespiral':
+                        switch ( att1 )
+                        {
+                            case 'pentagram':
+                                return 0
+                            case 'triplespiral':
+                                return 0
+                            case 'triplepoint':
+                                return 13
+                            case 'flower':
+                                return 14
+                            case 'candle':
+                                return 0
+                            case 'sword':
+                                return 0
+                            default:
+                                return -1
+                        }
+                    case 'triplepoint':
+                        switch ( att1 )
+                        {
+                            case 'pentagram':
+                                return 0
+                            case 'triplespiral':
+                                return 0
+                            case 'triplepoint':
+                                return 0 
+                            case 'flower':
+                                return 15
+                            case 'candle':
+                                return 0
+                            case 'sword':
+                                return 0
+                            default:
+                                return -1
+                        }
+                    case 'flower':
+                        return 0
+                    default:
+                        return -1
+                }
+            }
+            let BranchMapper = {
+                mouse: 'm',
+                bat: 'b',
+                swan: 's',
+                fox: 'f',
+                stag: 'st',
+                rabbit: 'r',
+                swallow: 'sw'
+            }
+            let IndexMapper = {
+                m1: 0,
+                m2: 1,
+                m3: 2,
+                m4: 3,
+                m5: 4,
+                m6: 5,
+                m7: 6,
+                m8: 7,
+                m9: 8,
+                m10: 9,
+                m11: 10,
+                m13: 12,
+                m14: 13,
+                m15: 14,
+                m16: 15,
+                b1: 16,
+                b2: 17,
+                b3: 18,
+                b4: 19,
+                b5: 20,
+                b6: 21,
+                b7: 22,
+                b8: 23,
+                b9: 24,
+                b10: 25,
+                b11: 26,
+                b12: 27,
+                b13: 28,
+                b14: 29,
+                b15: 30,
+                b16: 31,
+                s1: 32,
+                s2: 33,
+                s3: 34,
+                s4: 35,
+                s5: 36,
+                s6: 37,
+                s7: 38,
+                s8 : 40,
+                s9: 41,
+                s10: 42,
+                s11: 43,
+                s12: 45,
+                s13: 46,
+                s14: 47,
+                s15: 48,
+                s16: 49,
+                f1: 50,
+                f2: 51,
+                f3: 52,
+                f4: 53,
+                f5: 54,
+                f6: 55,
+                f7: 56,
+                f8: 57,
+                f9: 58,
+                f10: 59,
+                f11: 60,
+                f12: 61,
+                f13: 62,
+                f14: 63,
+                f15: 64,
+                f16: 65,
+                st1: 66,
+                st2: 67,
+                st3: 68,
+                st4: 69,
+                st5: 70,
+                st6: 71,
+                st7: 72,
+                st8: 73,
+                st9: 74,
+                st10: 75,
+                st11: 76,
+                st12: 77,
+                st13: 78,
+                st14: 79,
+                st15: 80,
+                st16: 81,
+                r1: 82,
+                r2: 83,
+                r3: 84,
+                r4: 85,
+                r5: 86,
+                r6: 87,
+                r7: 88,
+                r8: 89,
+                r9: 90,
+                r10: 91,
+                r11: 92,
+                r12: 93,
+                r13: 94,
+                r14: 95,
+                r15: 96,
+                r16: 97,
+                sw1: 98,
+                sw2: 99,
+                sw3: 100,
+                sw4: 101,
+                sw5: 102,
+                sw6: 103,
+                sw7: 104,
+                sw8: 105,
+                sw9: 106,
+                sw10: 107,
+                sw11: 108,
+                sw12: 109,
+                sw13: 110,
+                sw14: 111,
+                sw15: 112,
+                sw16: 113
+            }
+        </script>
+    </body>
+
+</html>
